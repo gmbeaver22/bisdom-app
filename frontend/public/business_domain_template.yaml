@@ -1,0 +1,164 @@
+business_domain:
+  name: "Name of the business domain"
+  description: "High-level description of the domain's purpose and scope"
+  version: "Template version number"
+  last_updated: "Date of last update (YYYY-MM-DD)"
+  
+  # Business Leadership & Strategy
+  leadership:
+    domain_owner:
+      name: "Name of the domain owner/leader"
+      role: "Official title of the domain owner"
+      contact:
+        email: "Business email of domain owner"
+        department: "Department or organizational unit"
+    strategic_goals:
+      - "Strategic goal 1: Description of the goal and intended outcome"
+      - "Strategic goal 2: Description of another strategic objective"
+  
+  # Key Performance Indicators
+  kpis:
+    - id: "Unique identifier for the KPI (e.g., KPI001)"
+      name: "Name of the KPI metric"
+      target: "Target value or threshold for the KPI"
+      current_value: "Current measurement of the KPI"
+      measurement_frequency: "How often the KPI is measured (Daily/Weekly/Monthly/Quarterly)"
+      trend: "Expected trend (Up/Down/Stable)"
+      related_strategic_goals: ["IDs of related strategic goals"]
+  
+  # Customer Use Cases
+  customer_use_cases:
+    - id: "Unique identifier for the use case (e.g., UC001)"
+      name: "Name of the business use case"
+      business_value: "Description of the value this use case provides to the business"
+      primary_actor: "Main stakeholder or user type for this use case"
+      success_criteria:
+        - "Measurable criterion for success"
+        - "Another measurable success criterion"
+      measured_by: ["IDs of related KPIs"]
+      required_capabilities: ["IDs of capabilities needed for this use case"]
+  
+  # Business Capabilities
+  business_capabilities:
+    - id: "Unique identifier for the capability (e.g., CAP001)"
+      name: "Name of the business capability"
+      level: "Capability hierarchy level (L1/L2/L3)"
+      description: "Detailed description of what this capability enables"
+      enables_use_cases: ["IDs of use cases this capability enables"]
+      maturity:
+        current_level: "Current maturity level (1-5)"
+        target_level: "Target maturity level (1-5)"
+        assessment_date: "Date of last maturity assessment (YYYY-MM-DD)"
+      required_data: ["IDs of required data assets]"
+      implemented_by:
+        primary_app: "ID of primary implementing application"
+        supporting_apps: ["IDs of supporting applications"]
+  
+  # Implementation Layer
+  implementation:
+    # Applications
+    applications:
+      - id: "Unique identifier for the application (e.g., APP001)"
+        name: "Name of the application"
+        implements_capabilities: ["IDs of capabilities this app implements"]
+        status: "Application lifecycle status (ACTIVE/PLANNED/RETIRING)"
+        version: "Current version number"
+        lifecycle:
+          implementation_date: "Go-live date (YYYY-MM-DD)"
+          sunset_date: "Planned retirement date if any (YYYY-MM-DD)"
+        dependencies:
+          data: ["IDs of required data assets"]
+          technical_components: ["IDs of technical components"]
+    
+    # Business Rules in GWT Format
+    business_rules:
+      - id: "Unique identifier for the rule (e.g., BR001)"
+        name: "Name of the business rule"
+        description: "Rule Description"
+        category: "Rule Category"
+        applies_to_use_cases: ["IDs of related use cases"]
+        owner: "Rule Owner"
+        gwt_format:
+          given:
+            - "Precondition 1"
+            - "Precondition 2"
+          when:
+            - "Trigger condition"
+          then:
+            - "Expected outcome 1"
+            - "Expected outcome 2"
+        validation:
+          - "Validation step 1"
+          - "Validation step 2"
+        impact:
+          kpis: ["Related KPI IDs"]
+          use_cases: ["Affected use case IDs"]
+        exceptions:
+          - condition: "Exception case"
+            handling: "Exception handling"
+
+    # Enhanced Domain Data Management
+    domain_data:
+      owned_data_elements:
+        - id: "Unique identifier for owned data (e.g., DATA001)"
+          name: "Name of the data element"
+          description: "Description"
+          classification: "PII/Confidential/Public"
+          quality_requirements:
+            - "Quality requirement 1"
+            - "Quality requirement 2"
+          governance:
+            owner: "Data Owner Name"
+            steward: "Current Domain"
+            policies:
+              - "Retention Policy"
+              - "Access Policy"
+          consumed_by:
+            applications: ["App IDs"]
+            capabilities: ["Capability IDs"]
+            use_cases: ["Use Case IDs"]
+          lifecycle:
+            creation: "How/where data is created"
+            updates: "Update process"
+            archival: "Archival rules"
+      
+      referenced_data_elements:
+        - id: "Unique identifier for referenced data (e.g., DATA002)"
+          name: "External Data Element"
+          stewarding_domain: "Other Domain Name"
+          access_requirements:
+            - "Access requirement 1"
+            - "Access requirement 2"
+          used_by:
+            applications: ["App IDs"]
+            capabilities: ["Capability IDs"]
+
+      data_flows:
+        - flow_id: "Unique identifier for flow (e.g., DF001)"
+          source:
+            system: "Source System"
+            data_elements: ["Data element IDs"]
+          destination:
+            system: "Destination System"
+            data_elements: ["Data element IDs"]
+          frequency: "Real-time/Batch"
+          volume: "Expected data volume"
+    
+    # Technical Components
+    technical_components:
+      - id: "Unique identifier for the component (e.g., COMP001)"
+        name: "Name of the technical component"
+        type: "Component type (Microservice/Database/API/etc.)"
+        supports_applications: ["IDs of applications using this component"]
+        implements_capabilities: ["IDs of capabilities this component supports"]
+  
+  # Continuous Improvement
+  improvement_backlog:
+    - id: "Unique identifier for the improvement (e.g., IMP001)"
+      name: "Name of the improvement initiative"
+      affects_capabilities: ["IDs of capabilities affected"]
+      priority: "Priority level (High/Medium/Low)"
+      expected_benefits:
+        - "Description of expected benefit"
+        - "Description of another expected benefit"
+      status: "Current status (Planned/In-Progress/Completed)"
