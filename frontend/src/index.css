@@ -7,11 +7,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f5f5f5;
   color: #333;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .App {
   min-height: 100vh;
-  padding: 20px;
+}
+
+input, button {
+  font-family: inherit;
 }
 
 a {
@@ -21,8 +29,4 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-button {
-  font-family: inherit;
 } 

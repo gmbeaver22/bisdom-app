@@ -3,10 +3,10 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 
-const Capabilities = () => {
+const BusinessRules = () => {
   const { domainId } = useParams();
   const { token } = useAuth();
-  const [capabilities, setCapabilities] = useState([]);
+  const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,23 +16,23 @@ const Capabilities = () => {
       return;
     }
 
-    const fetchCapabilities = async () => {
+    const fetchRules = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5001/api/capabilities?domain_id=${domainId}`,
+          `http://localhost:5001/api/businessRules?domain_id=${domainId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setCapabilities(res.data);
+        setRules(res.data);
         setLoading(false);
       } catch (err) {
-        console.error("Failed to fetch capabilities:", err);
-        setError("Failed to fetch capabilities");
+        console.error("Failed to fetch business rules:", err);
+        setError("Failed to fetch business rules");
         setLoading(false);
       }
     };
-    fetchCapabilities();
+    fetchRules();
   }, [domainId, token]);
 
   if (loading) return <p>Loading...</p>;
@@ -40,24 +40,22 @@ const Capabilities = () => {
 
   return (
     <div>
-      <h2>Capabilities for Domain</h2>
+      <h2>Business Rules for Domain</h2>
       <ul>
-        {capabilities.map((capability) => (
-          <li key={capability._id}>
-            {capability.name} - Level: {capability.level}{" "}
-            <Link
-              to={`/domains/${domainId}/capabilities/${capability._id}/edit`}
-            >
+        {rules.map((rule) => (
+          <li key={rule._id}>
+            {rule.name} - Category: {rule.category}{" "}
+            <Link to={`/domains/${domainId}/businessRules/${rule._id}/edit`}>
               Edit
             </Link>
           </li>
         ))}
       </ul>
-      <Link to={`/domains/${domainId}/capabilities/new`}>
-        Add New Capability
+      <Link to={`/domains/${domainId}/businessRules/new`}>
+        Add New Business Rule
       </Link>
     </div>
   );
 };
 
-export default Capabilities;
+export default BusinessRules;

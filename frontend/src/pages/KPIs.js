@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const KPIs = () => {
   const { domainId } = useParams();
-  const { token } = useContext(AuthContext);
+  const { token } = useAuth();
   const [kpis, setKpis] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,9 +18,12 @@ const KPIs = () => {
 
     const fetchKpis = async () => {
       try {
-        const res = await axios.get(`/api/kpis?domain_id=${domainId}`, {
-          headers: { Authorization: token },
-        });
+        const res = await axios.get(
+          `http://localhost:5001/api/kpis?domain_id=${domainId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setKpis(res.data);
         setLoading(false);
       } catch (err) {

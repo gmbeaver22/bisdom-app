@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const auth = (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
-    const decoded = jwt.verify(token, "secretkey");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
     next();
   } catch (error) {
@@ -18,7 +18,10 @@ const auth = (req, res, next) => {
 // Get all domains
 router.get("/", auth, async (req, res) => {
   try {
-    const domains = await Domain.find();
+    console.log("Auth token:", req.header("Authorization")); // Debug log
+    console.log("User ID:", req.userId); // Debug log
+    const domains = await Domain.find({ createdBy: req.userId });
+    console.log("Found domains:", domains); // Debug log
     res.json(domains);
   } catch (error) {
     console.error("Error fetching domains:", error);

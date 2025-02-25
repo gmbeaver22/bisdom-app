@@ -1,19 +1,24 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import "../styles/login.css";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
   const history = useHistory();
+  const { login } = useAuth();
 
-  // Handle changes to the input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCredentials({ ...credentials, [name]: value });
+    console.log("Input changed:", name, value); // Debug log
+    setCredentials((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -27,8 +32,7 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log("Response status:", response.status);
-      console.log("Response data:", data);
+      console.log("Response:", { status: response.status, data }); // Debug log
 
       if (!response.ok) {
         throw new Error(data.error || "Login failed");
@@ -36,46 +40,52 @@ const Login = () => {
 
       if (data.token) {
         setStatus("Login successful!");
-        localStorage.setItem("token", data.token);
+        login(data.token);
         history.push("/domains");
       }
     } catch (error) {
       console.error("Login error:", error);
       setError(error.message || "Login failed");
-      setStatus("Login failed");
+      setStatus("");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      {status && <div style={{ color: "blue" }}>{status}</div>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
+    <div className="login-container">
+      <h2 className="login-title">Welcome to Bisdom</h2>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
-            placeholder="Email"
             name="email"
             value={credentials.email}
             onChange={handleChange}
-            style={{ padding: "5px" }}
+            required
+            autoComplete="email"
+            placeholder="Enter your email"
           />
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
           <input
+            id="password"
             type="password"
-            placeholder="Password"
             name="password"
             value={credentials.password}
             onChange={handleChange}
-            style={{ padding: "5px" }}
+            required
+            autoComplete="current-password"
+            placeholder="Enter your password"
           />
         </div>
-        <button type="submit" style={{ padding: "5px 10px" }}>
-          Login
+        <button type="submit" className="login-button">
+          Log In
         </button>
       </form>
+      {error && <div className="status-message error">{error}</div>}
+      {status && <div className="status-message success">{status}</div>}
     </div>
   );
 };

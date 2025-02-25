@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const UseCases = () => {
   const { domainId } = useParams();
-  const { token } = useContext(AuthContext);
+  const { token } = useAuth();
   const [useCases, setUseCases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,9 +18,12 @@ const UseCases = () => {
 
     const fetchUseCases = async () => {
       try {
-        const res = await axios.get(`/api/useCases?domain_id=${domainId}`, {
-          headers: { Authorization: token },
-        });
+        const res = await axios.get(
+          `http://localhost:5001/api/useCases?domain_id=${domainId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setUseCases(res.data);
         setLoading(false);
       } catch (err) {

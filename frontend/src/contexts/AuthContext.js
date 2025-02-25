@@ -1,11 +1,11 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import apiService from "../services/api";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 // Create the AuthContext
 const AuthContext = createContext();
 
 // AuthProvider component to wrap the app and provide auth state
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
@@ -13,40 +13,36 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
+      // Set default auth header for all axios requests
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
       localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
     }
     setLoading(false);
   }, [token]);
 
   // Login function
-  const login = async (username, password) => {
-    try {
-      const response = await apiService.login({ username, password });
-      const newToken = response.data.token;
-      setToken(newToken);
-      localStorage.setItem("token", newToken);
-      return true; // Indicate success
-    } catch (err) {
-      console.error("Login failed", err);
-      return false; // Indicate failure
-    }
+  const login = async (newToken) => {
+    setToken(newToken);
+    localStorage.setItem("token", newToken);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
   };
 
   // Logout function
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");
+    delete axios.defaults.headers.common["Authorization"];
     window.location.href = "/login"; // Redirect to login page
   };
 
   // Value provided to context consumers
-  const authContextValue = {
+  const value = {
     token,
     login,
     logout,
     isAuthenticated: !!token,
-    setToken,
   };
 
   // Render children only after loading is complete
@@ -55,14 +51,14 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={authContextValue}>
-      {children}
+    <AuthContext.Provider value={value}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
 
 // Custom hook to use the AuthContext
-const useAuth = () => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
@@ -70,4 +66,4 @@ const useAuth = () => {
   return context;
 };
 
-export { AuthProvider, useAuth, AuthContext };
+export { AuthContext };

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import DomainList from "../components/DomainList";
 import { useAuth } from "../contexts/AuthContext";
 
 const Domains = () => {
@@ -18,6 +17,7 @@ const Domains = () => {
 
     const fetchDomains = async () => {
       try {
+        console.log("Fetching domains with token:", token); // Debug log
         const res = await axios.get("http://localhost:5001/api/domains", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -41,7 +41,14 @@ const Domains = () => {
       {domains.length === 0 ? (
         <p>No domains found. Create your first domain!</p>
       ) : (
-        <DomainList domains={domains} />
+        <ul>
+          {domains.map((domain) => (
+            <li key={domain._id}>
+              {domain.name} - {domain.description}{" "}
+              <Link to={`/domains/${domain._id}`}>View Details</Link>
+            </li>
+          ))}
+        </ul>
       )}
       <Link to="/domains/new">Add New Domain</Link>
     </div>

@@ -3,10 +3,10 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 
-const Capabilities = () => {
+const TechnicalComponents = () => {
   const { domainId } = useParams();
   const { token } = useAuth();
-  const [capabilities, setCapabilities] = useState([]);
+  const [components, setComponents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,23 +16,23 @@ const Capabilities = () => {
       return;
     }
 
-    const fetchCapabilities = async () => {
+    const fetchComponents = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5001/api/capabilities?domain_id=${domainId}`,
+          `http://localhost:5001/api/technicalComponents?domain_id=${domainId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setCapabilities(res.data);
+        setComponents(res.data);
         setLoading(false);
       } catch (err) {
-        console.error("Failed to fetch capabilities:", err);
-        setError("Failed to fetch capabilities");
+        console.error("Failed to fetch technical components:", err);
+        setError("Failed to fetch technical components");
         setLoading(false);
       }
     };
-    fetchCapabilities();
+    fetchComponents();
   }, [domainId, token]);
 
   if (loading) return <p>Loading...</p>;
@@ -40,24 +40,24 @@ const Capabilities = () => {
 
   return (
     <div>
-      <h2>Capabilities for Domain</h2>
+      <h2>Technical Components for Domain</h2>
       <ul>
-        {capabilities.map((capability) => (
-          <li key={capability._id}>
-            {capability.name} - Level: {capability.level}{" "}
+        {components.map((component) => (
+          <li key={component._id}>
+            {component.name} - Type: {component.type}{" "}
             <Link
-              to={`/domains/${domainId}/capabilities/${capability._id}/edit`}
+              to={`/domains/${domainId}/technicalComponents/${component._id}/edit`}
             >
               Edit
             </Link>
           </li>
         ))}
       </ul>
-      <Link to={`/domains/${domainId}/capabilities/new`}>
-        Add New Capability
+      <Link to={`/domains/${domainId}/technicalComponents/new`}>
+        Add New Technical Component
       </Link>
     </div>
   );
 };
 
-export default Capabilities;
+export default TechnicalComponents;
